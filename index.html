@@ -103,7 +103,7 @@
         {% csrf_token %}-->
     <form action="{% url 'check_flood' %}" method="POST">
         <label for="city">City Name:</label>
-        <input type="text" id="city" name="city" required placeholder="e.g., Kigali" value="{{ city_name }}">
+        <input type="text" id="city" name="city" required placeholder="e.g., Kigali" value="">
 
         <label for="rainfall">Rainfall (mm):</label>
         <input type="number" id="rainfall" name="rainfall" required min="0" placeholder="e.g., 120" value="{{ rainfall }}">
@@ -132,7 +132,7 @@
     <!-- Display Measurements Entered {% if city_name %} -->
     
     <div class="data-entered">
-        <p><strong>City:</strong> {{ city_name }} | <strong>Rainfall:</strong> {{ rainfall }} mm | <strong>Water Level:</strong> {{ water_level }} m</p>
+        <p><strong>City:</strong> <!--{{ city_name }}--> Kigali | <strong>Rainfall:</strong> <!--{{ rainfall }}--> mm | <strong>Water Level:</strong><!-- {{ water_level }}--> m</p>
     </div>
    <!-- {% endif %}-->
 
