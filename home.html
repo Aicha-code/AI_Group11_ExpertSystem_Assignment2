@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rwanda Flood Risk Assessment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;  /* Made the container a bit wider */
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-sizing: border-box;
+            margin-top: 20px;  /* Added space at the top */
+        }
+        h1 {
+            font-size: 22px;  /* Increased font size */
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;  /* More space at the top */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;  /* Increased gap between form fields */
+        }
+        input, button {
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .low-risk {
+            background-color: #4CAF50;  /* Green */
+            color: white;
+        }
+        .medium-risk {
+            background-color: #FF9800;  /* Orange */
+            color: white;
+        }
+        .high-risk {
+            background-color: #F44336;  /* Red */
+            color: white;
+        }
+        .safety-instructions {
+            font-size: 12px;
+            color: #555;
+            background-color: #f8f8f8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .data-entered {
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 12px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Flood Risk Assessment</h1>
+
+    <!-- Form to take user input -->
+    <form action="{% url 'check_flood' %}" method="POST">
+        {% csrf_token %}
+        <label for="city">City Name:</label>
+        <input type="text" id="city" name="city" required placeholder="e.g., Kigali" value="{{ city_name }}">
+
+        <label for="rainfall">Rainfall (mm):</label>
+        <input type="number" id="rainfall" name="rainfall" required min="0" placeholder="e.g., 120" value="{{ rainfall }}">
+
+        <label for="water_level">Water Level (m):</label>
+        <input type="number" id="water_level" name="water_level" required min="0" step="0.01" placeholder="e.g., 2.5" value="{{ water_level }}">
+
+        <button type="submit">Check Flood Risk</button>
+    </form>
+
+    <!-- Show flood risk result and suggested action -->
+    {% if flood_risk %}
+    <div class="result {% if flood_risk == 'High Flood Risk' %}high-risk{% elif flood_risk == 'Medium Flood Risk' %}medium-risk{% else %}low-risk{% endif %}">
+        <p>
+            {% if flood_risk == 'Low Flood Risk' %}
+            Low Risk: Stay informed and clear your drainage systems.
+            {% elif flood_risk == 'Medium Flood Risk' %}
+            Medium Risk: Prepare evacuation plans and flood barriers.
+            {% elif flood_risk == 'High Flood Risk' %}
+            High Risk: Evacuate to higher ground immediately.
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Display Measurements Entered -->
+    {% if city_name %}
+    <div class="data-entered">
+        <p><strong>City:</strong> {{ city_name }} | <strong>Rainfall:</strong> {{ rainfall }} mm | <strong>Water Level:</strong> {{ water_level }} m</p>
+    </div>
+    {% endif %}
+
+    <!-- Safety Instructions -->
+    <div class="safety-instructions">
+        <p><strong>Safety Instructions:</strong></p>
+        <ul>
+            <li>Stay Informed: Monitor weather updates from local meteorological agencies.</li>
+            <li>Evacuate Early: Move to higher ground or shelters if water levels rise.</li>
+            <li>Avoid Floodwaters: Do not walk or drive through moving water to prevent drowning or being swept away.</li>
+            <li>Secure Clean Water: Use purification tablets or boiled water if supplies are contaminated.</li>
+            <li>Seek Help: Contact local authorities or NGOs if trapped or in need of supplies.</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
