@@ -4,7 +4,8 @@ This is an AI-powered Flood Alert Expert System that provides evacuation alerts 
 
 ## To launch the Expert System : 
 Click the button below to open the notebook in Binder and interact with the flood alert system:  
-[![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Aicha-code/AI_Group11_ExpertSystem_Assignment2/main?filepath=flood_alert_expert_system.ipynb)
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Aicha-code/AI_Group11_ExpertSystem_Assignment2/main)
 
 ## 🔧 How It Works  
 - **Step 1:** Click the **Launch Binder** button above.  
