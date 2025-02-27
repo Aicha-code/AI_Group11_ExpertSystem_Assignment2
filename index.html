@@ -76,8 +76,8 @@
     <div class="container">
         <h1>Your Flood Emergency Response Advisor</h1>
         <p>Please check the boxes that apply to your current situation:</p>
-        <form id="floodForm">
-            {% csrf_token %}
+        <form id="floodForm" {% csrf_token %}>
+            
             <div class="checkbox-group">
                 <label><input type="checkbox" id="rainfall"> Is heavy rainfall forecast issued? (More than 100mm in 24h?)</label>
                 <label><input type="checkbox" id="waterLevels"> Are water levels rising rapidly?</label>
