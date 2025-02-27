@@ -3,151 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rwanda Flood Risk Assessment</title>
+    <title>Your Flood Emergency Response Advisor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: #b3daff;
+            text-align: center;
+            padding: 20px;
         }
         .container {
-            width: 90%;
-            max-width: 500px;  /* Made the container a bit wider */
+            max-width: 700px;
+            margin-top: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            background: white;
             padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            box-sizing: border-box;
-            margin-top: 20px;  /* Added space at the top */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            font-size: 22px;  /* Increased font size */
-            text-align: center;
-            color: #4CAF50;
-            margin-bottom: 20px;  /* More space at the top */
+            color: #003366;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;  /* Increased gap between form fields */
-        }
-        input, button {
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result {
-            margin: 15px 0;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .low-risk {
-            background-color: #4CAF50;  /* Green */
-            color: white;
-        }
-        .medium-risk {
-            background-color: #FF9800;  /* Orange */
-            color: white;
-        }
-        .high-risk {
-            background-color: #F44336;  /* Red */
-            color: white;
-        }
-        .safety-instructions {
-            font-size: 12px;
-            color: #555;
-            background-color: #f8f8f8;
-            padding: 12px;
-            border-radius: 6px;
+        .checkbox-group {
+            text-align: left;
             margin-top: 20px;
         }
-        .data-entered {
-            font-size: 14px;
-            color: #333;
-            margin-top: 10px;
+        label {
+            display: block;
+            margin: 10px 0;
         }
-        ul {
-            padding-left: 20px;
-            margin: 0;
-            font-size: 12px;
+        button {
+            background-color: #006FD6FF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
         }
-        li {
-            margin-bottom: 5px;
+        button:hover {
+            background-color: #00050AFF;
+        }
+        .response-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            display: none;
+            font-weight: bold;
+        }
+        .low-risk {
+            background-color: #c8e6c9; /* Light Green */
+            color: #1b5e20;
+            border: 2px solid #1b5e20;
+        }
+        .moderate-risk {
+            background-color: #CD7228FF; /* Light Yellow */
+            color: #544001FF;
+            border: 2px solid #856404;
+        }
+        .high-risk {
+            background-color:#FC7373FF; /* Strong Red for Critical Alert */
+            color: #721c24;
+            border: 2px solid #721c24;
+            font-weight: bold;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Flood Risk Assessment</h1>
-
-    <!-- Form to take user input  
-        {% csrf_token %}-->
-    <form action="{% url 'check_flood' %}" method="POST">
-        <label for="city">City Name:</label>
-        <input type="text" id="city" name="city" required placeholder="e.g., Kigali" value="">
-
-        <label for="rainfall">Rainfall (mm):</label>
-        <input type="number" id="rainfall" name="rainfall" required min="0" placeholder="e.g., 120" value="{{ rainfall }}">
-
-        <label for="water_level">Water Level (m):</label>
-        <input type="number" id="water_level" name="water_level" required min="0" step="0.01" placeholder="e.g., 2.5" value="{{ water_level }}">
-
-        <button type="submit">Check Flood Risk</button>
-    </form>
-
-    <!-- Show flood risk result and suggested action  {% if flood_risk %}-->
-    
-    <div class="result {% if flood_risk == 'High Flood Risk' %}high-risk{% elif flood_risk == 'Medium Flood Risk' %}medium-risk{% else %}low-risk{% endif %}">
-        <p>
-            <!--{% if flood_risk == 'Low Flood Risk' %}
-            Low Risk: Stay informed and clear your drainage systems.
-            {% elif flood_risk == 'Medium Flood Risk' %}
-            Medium Risk: Prepare evacuation plans and flood barriers.
-            {% elif flood_risk == 'High Flood Risk' %}
-            High Risk: Evacuate to higher ground immediately.
-            {% endif %}-->
-        </p>
+    <div class="container">
+        <h1>Your Flood Emergency Response Advisor</h1>
+        <p>Please check the boxes that apply to your current situation:</p>
+        <form id="floodForm">
+            {% csrf_token %}
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="rainfall"> Is heavy rainfall forecast issued? (More than 100mm in 24h?)</label>
+                <label><input type="checkbox" id="waterLevels"> Are water levels rising rapidly?</label>
+                <label><input type="checkbox" id="roads"> Are roads impassable?</label>
+                <label><input type="checkbox" id="cleanWater"> Is clean water available?</label>
+                <label><input type="checkbox" id="isolation"> Is your community isolated?</label>
+            </div>
+            <button type="button" onclick="analyzeSituation()">Get Response Advice</button>
+        </form>
+        <p id="responseMessage"></p>
     </div>
-    <!--{% endif %}-->
-
-    <!-- Display Measurements Entered {% if city_name %} -->
-    
-    <div class="data-entered">
-        <p><strong>City:</strong> <!--{{ city_name }}--> Kigali | <strong>Rainfall:</strong> <!--{{ rainfall }}--> mm | <strong>Water Level:</strong><!-- {{ water_level }}--> m</p>
-    </div>
-   <!-- {% endif %}-->
-
-    <!-- Safety Instructions -->
-    <div class="safety-instructions">
-        <p><strong>Safety Instructions:</strong></p>
-        <ul>
-            <li>Stay Informed: Monitor weather updates from local meteorological agencies.</li>
-            <li>Evacuate Early: Move to higher ground or shelters if water levels rise.</li>
-            <li>Avoid Floodwaters: Do not walk or drive through moving water to prevent drowning or being swept away.</li>
-            <li>Secure Clean Water: Use purification tablets or boiled water if supplies are contaminated.</li>
-            <li>Seek Help: Contact local authorities or NGOs if trapped or in need of supplies.</li>
-        </ul>
-    </div>
-</div>
-
 </body>
+<script>
+    function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    function analyzeSituation() {
+        let formData = new FormData();
+        formData.append("rainfall", document.getElementById("rainfall").checked ? "on" : "off");
+        formData.append("waterLevels", document.getElementById("waterLevels").checked ? "on" : "off");
+        formData.append("roads", document.getElementById("roads").checked ? "on" : "off");
+        formData.append("cleanWater", document.getElementById("cleanWater").checked ? "on" : "off");
+        formData.append("isolation", document.getElementById("isolation").checked ? "on" : "off");
+
+        fetch('/analyze/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCsrfToken()  // Include the CSRF token in the headers
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.message) {
+                document.getElementById("responseMessage").innerText = data.message;  // Display the response message
+                // Apply the respective class for styling
+                let responseBox = document.getElementById("responseMessage");
+                responseBox.style.display = "block";  // Ensure it's displayed
+
+                if (data.alertType === "low-risk") {
+                    responseBox.className = "response-box low-risk";
+                } else if (data.alertType === "moderate-risk") {
+                    responseBox.className = "response-box moderate-risk";
+                } else if (data.alertType === "high-risk") {
+                    responseBox.className = "response-box high-risk";
+                }
+            } else {
+                document.getElementById("responseMessage").innerText = "Unexpected response format.";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("responseMessage").innerText = "An error occurred. Please try again.";
+        });
+    }
+</script>
 </html>
